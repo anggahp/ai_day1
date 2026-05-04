@@ -1,0 +1,57 @@
+generate_solution_task:
+  description: >
+    Berikan solusi teknis untuk masalah berikut:
+
+    Jenis Masalah : {issue_type}
+    Sistem        : {system}
+
+    Buat daftar langkah solusi yang:
+    - Konkret dan bisa langsung dieksekusi
+    - Urut dari langkah pertama hingga verifikasi
+    - Mencakup workaround sementara jika ada
+    - Maksimal 7 langkah, masing-masing singkat dan jelas
+
+  expected_output: >
+    Daftar langkah solusi dalam Bahasa Indonesia, setiap langkah
+    berupa kalimat singkat dan actionable.
+    Contoh format:
+    - Cek log autentikasi di server
+    - Reset token sesi user yang bermasalah
+    - Verifikasi enkripsi password di database
+  agent: solution_agent
+  output_file: output/solution.md
+
+create_documentation_task:
+  description: >
+    Berdasarkan solusi yang sudah dibuat untuk masalah {issue_type} pada {system},
+    buat dokumentasi knowledge base dalam format JSON yang ketat berikut:
+
+    {{
+      "solution": [
+        "<langkah 1>",
+        "<langkah 2>",
+        "<langkah 3>"
+      ],
+      "documentation": "<artikel dokumentasi lengkap dalam satu string, gunakan \\n untuk baris baru>"
+    }}
+
+    Untuk field "documentation", buat artikel dengan struktur:
+    Problem: [deskripsi masalah]
+    Cause: [penyebab umum]
+    Solution: [ringkasan solusi]
+    Prevention: [cara mencegah terulang]
+
+    PENTING:
+    - Output HARUS dimulai langsung dengan karakter {{ tanpa awalan apapun.
+    - DILARANG menggunakan markdown code block (``` atau ```json).
+    - DILARANG menambahkan teks apapun sebelum atau sesudah JSON.
+    - Pastikan output adalah JSON valid murni yang dapat langsung di-parse.
+
+  expected_output: >
+    JSON valid murni tanpa markdown, tanpa ```json, tanpa teks tambahan.
+    Output dimulai langsung dengan karakter { dan diakhiri dengan karakter }.
+    Berisi dua field: solution (array string) dan documentation (string).
+  agent: documentation_agent
+  output_file: output/documentation.json
+  context:
+    - generate_solution_task

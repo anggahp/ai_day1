@@ -1,0 +1,26 @@
+[project]
+name = "pelatihanindoprima"
+version = "0.1.0"
+description = "pelatihanindoprima using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "celery>=5.6.3",
+    "crewai[tools]==1.14.4",
+    "fastapi>=0.136.1",
+    "redis>=7.4.0",
+    "uvicorn>=0.46.0",
+]
+
+[project.scripts]
+kickoff = "pelatihanindoprima.main:kickoff"
+run_crew = "pelatihanindoprima.main:kickoff"
+plot = "pelatihanindoprima.main:plot"
+run_with_trigger = "pelatihanindoprima.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"

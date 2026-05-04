@@ -1,0 +1,116 @@
+planning_task:
+  description: >
+    Create a detailed outline for a blog post about {topic} targeting the {location} area.
+
+    The outline should include:
+    - A compelling title
+    - An introduction hook
+    - 3-5 main sections with key points to cover in each
+    - A conclusion with a call to action
+
+    Make the outline detailed enough that a writer can produce
+    a full blog post from it without additional research.
+  expected_output: >
+    A structured blog post outline with a title, introduction notes,
+    detailed section breakdowns, and conclusion notes.
+    IMPORTANT: Write the entire output in Bahasa Indonesia.
+  agent: planner
+
+writing_task:
+  description: >
+    Using the outline provided, write a full blog post about {topic} for the {location} area.
+
+    Requirements:
+    - Follow the outline structure closely
+    - Write in a clear, engaging, and conversational tone
+    - Each section should be 2-3 paragraphs
+    - Include a strong introduction and conclusion
+    - Target around 800-1200 words
+  expected_output: >
+    A complete blog post in markdown format, ready for editing.
+    The post should follow the outline and be well-written with
+    clear transitions between sections.
+    IMPORTANT: Write the entire output in Bahasa Indonesia.
+  agent: writer
+
+editing_task:
+  description: >
+    Review and edit the blog post about {topic} for the {location} area.
+
+    Focus on:
+    - Fixing any grammar or spelling errors
+    - Improving sentence clarity and flow
+    - Ensuring consistent tone throughout
+    - Strengthening the introduction and conclusion
+    - Removing any redundancy
+
+    Do not rewrite the post — refine and polish it.
+  expected_output: >
+    The final, polished blog post in markdown format without '```'.
+    Publication-ready with clean formatting and professional prose.
+    IMPORTANT: Write the entire output in Bahasa Indonesia.
+  agent: editor
+  output_file: output/post.md
+
+summarizer_task:
+  description: >
+    INPUT ANALYSIS:
+    The original report to be simplified is as follows:
+
+    SPECIFIC INSTRUCTIONS:
+    Your task is to analyze the above report and generate exactly
+    5 (FIVE) insight points that are:
+
+    1. **CLEAR**: Use everyday language that is easy to understand
+    2. **CONCISE**: Maximum 2 sentences per point
+    3. **IMPACTFUL**: Highlight the most important/interesting findings
+    4. **STRUCTURED**: Each point contains one main idea
+    5. **ACTIONABLE**: Provides clear direction or recommendations
+
+    EXPECTED OUTPUT FORMAT:
+
+    # 5 KEY INSIGHTS: [Brief Report Title]
+
+    ## Insight 1: [Insight Title]
+    [1-2 sentence clear and concise explanation]
+
+    ## Insight 2: [Insight Title]
+    [1-2 sentence clear and concise explanation]
+
+    ## Insight 3: [Insight Title]
+    [1-2 sentence clear and concise explanation]
+
+    ## Insight 4: [Insight Title]
+    [1-2 sentence clear and concise explanation]
+
+    ## Insight 5: [Insight Title]
+    [1-2 sentence clear and concise explanation]
+
+    ---
+
+    WORKFLOW:
+    1. Read and understand the entire report
+    2. Identify the 5 most critical findings
+    3. Rewrite each finding in simple language
+    4. Add relevant icons for visual appeal
+    5. Review whether each point meets the above criteria
+
+    ---
+
+    ---
+
+    IMPORTANT RULES:
+    - DO NOT generate more than 5 points
+    - DO NOT use technical jargon without explanation
+    - DO NOT copy sentences directly from the original report
+    - MUST use proper Bahasa Indonesia grammar
+    - MUST include a title for each insight
+    - ALL output MUST be written in Bahasa Indonesia
+
+  expected_output: >
+    5 structured insight points in the specified format,
+    each with a title and 1-2 sentence explanation.
+    Total output no more than 15 lines for explanations.
+  agent: summarizer
+  context:
+    - editing_task

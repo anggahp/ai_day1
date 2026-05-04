@@ -1,0 +1,245 @@
+market_research_task:
+  description: >
+    Lakukan riset pasar yang mendalam dan komprehensif tentang industri {topic}
+    di wilayah {location}.
+
+    Cakupan riset meliputi:
+
+    1. UKURAN & POTENSI PASAR
+       - Estimasi ukuran pasar (market size) saat ini di {location}
+       - Proyeksi pertumbuhan pasar dalam 3-5 tahun ke depan
+       - Segmen pasar utama yang ada
+
+    2. TREN INDUSTRI
+       - Tren terkini yang mempengaruhi industri {topic} di {location}
+       - Faktor pendorong pertumbuhan (growth drivers)
+       - Potensi disrupsi atau ancaman industri
+
+    3. KONDISI PASAR LOKAL {location}
+       - Karakteristik unik pasar {location} untuk {topic}
+       - Regulasi dan kebijakan lokal yang relevan
+       - Infrastruktur dan ekosistem pendukung
+       - Faktor geografis, demografis, dan ekonomi yang berpengaruh
+
+    4. PELUANG PASAR
+       - Segmen yang belum terlayani (underserved)
+       - Kebutuhan pasar yang belum terpenuhi
+       - Potensi inovasi produk/layanan
+
+  expected_output: >
+    Laporan riset pasar yang komprehensif dalam Bahasa Indonesia dengan format:
+
+    # RISET PASAR: {topic} di {location}
+
+    ## 1. Gambaran Umum Pasar
+    [Deskripsi kondisi pasar saat ini]
+
+    ## 2. Ukuran & Potensi Pasar
+    [Data estimasi ukuran pasar dan proyeksi pertumbuhan]
+
+    ## 3. Tren Industri
+    [Minimal 5 tren utama dengan penjelasan dampaknya]
+
+    ## 4. Kondisi Pasar Lokal {location}
+    [Karakteristik spesifik dan faktor lokal yang berpengaruh]
+
+    ## 5. Peluang Pasar
+    [Minimal 3 peluang konkret yang bisa dimanfaatkan]
+
+    ## 6. Temuan Kunci
+    [5 poin insight paling penting dari riset]
+  agent: market_researcher
+
+competitive_analysis_task:
+  description: >
+    Lakukan analisis kompetitif yang menyeluruh untuk bisnis {topic}
+    di {location} berdasarkan hasil riset pasar yang telah dilakukan.
+
+    Analisis mencakup:
+
+    1. PEMETAAN LANSKAP KOMPETITIF
+       - Identifikasi pemain utama (nasional dan lokal) di {location}
+       - Kategorisasi kompetitor: langsung, tidak langsung, dan potensial
+       - Peta posisi kompetitor (positioning map)
+
+    2. ANALISIS KOMPETITOR UTAMA (minimal 3)
+       Untuk setiap kompetitor, analisis:
+       - Profil singkat dan skala bisnis
+       - Produk/layanan unggulan dan harga
+       - Target pasar dan strategi pemasaran
+       - Keunggulan dan kelemahan utama
+       - Estimasi pangsa pasar
+
+    3. ANALISIS SWOT KOMPETITIF
+       - Strengths: Apa yang dikuasai kompetitor
+       - Weaknesses: Celah dan kelemahan kompetitor
+       - Opportunities: Peluang yang belum dimanfaatkan kompetitor
+       - Threats: Ancaman dari pemain baru atau substitusi
+
+    4. CELAH PASAR (MARKET GAP)
+       - Kebutuhan konsumen yang belum dipenuhi kompetitor
+       - Segmen yang diabaikan kompetitor
+       - Diferensiasi yang mungkin dilakukan
+
+  expected_output: >
+    Laporan analisis kompetitif dalam Bahasa Indonesia dengan format:
+
+    # ANALISIS KOMPETITIF: {topic} di {location}
+
+    ## 1. Lanskap Kompetitif
+    [Overview ekosistem persaingan]
+
+    ## 2. Profil Kompetitor Utama
+    [Tabel dan deskripsi kompetitor dengan perbandingan fitur/harga/target pasar]
+
+    ## 3. Analisis SWOT Kompetitif
+    [Matrix SWOT lengkap]
+
+    ## 4. Celah Pasar & Diferensiasi
+    [Minimum 3 celah pasar konkret dengan rekomendasi diferensiasi]
+
+    ## 5. Competitive Intelligence Summary
+    [Kesimpulan posisi persaingan dan rekomendasi positioning]
+  agent: competitive_analyst
+  context:
+    - market_research_task
+
+consumer_analysis_task:
+  description: >
+    Analisis secara mendalam profil dan perilaku konsumen target untuk
+    bisnis {topic} di {location} berdasarkan hasil riset pasar dan analisis kompetitor.
+
+    Cakupan analisis:
+
+    1. SEGMENTASI PASAR
+       - Segmentasi demografis (usia, gender, pendapatan, pendidikan)
+       - Segmentasi psikografis (gaya hidup, nilai, kepribadian)
+       - Segmentasi geografis dalam {location} (area/kecamatan potensial)
+       - Segmentasi perilaku (frekuensi pembelian, loyalitas, usage rate)
+
+    2. BUYER PERSONA (buat 2-3 persona utama)
+       Untuk setiap persona:
+       - Profil demografis dan psikografis
+       - Goals dan aspirasi
+       - Pain points dan frustasi
+       - Kebiasaan dan preferensi konsumsi
+       - Media dan channel komunikasi yang digunakan
+       - Faktor pengambilan keputusan pembelian
+
+    3. ANALISIS KEBUTUHAN & PREFERENSI
+       - Kebutuhan fungsional konsumen {topic} di {location}
+       - Kebutuhan emosional dan sosial
+       - Preferensi harga dan value for money
+       - Ekspektasi kualitas dan layanan
+
+    4. CUSTOMER JOURNEY
+       - Bagaimana konsumen mengetahui dan mencari {topic}
+       - Proses evaluasi dan pertimbangan
+       - Momen pembelian dan pasca pembelian
+       - Touchpoint kritis yang mempengaruhi keputusan
+
+  expected_output: >
+    Laporan analisis konsumen dalam Bahasa Indonesia dengan format:
+
+    # ANALISIS KONSUMEN: {topic} di {location}
+
+    ## 1. Segmentasi Pasar
+    [Breakdown segmen dengan estimasi ukuran masing-masing]
+
+    ## 2. Buyer Persona
+    [2-3 persona lengkap dengan foto persona (deskripsi visual), quotes, dan detail profil]
+
+    ## 3. Analisis Kebutuhan & Preferensi
+    [Pain points utama, kebutuhan utama, dan ekspektasi konsumen]
+
+    ## 4. Customer Journey Map
+    [Perjalanan konsumen dari awareness hingga advocacy]
+
+    ## 5. Key Consumer Insights
+    [5 insight terpenting tentang konsumen yang harus diperhatikan pelaku bisnis]
+  agent: consumer_analyst
+  context:
+    - market_research_task
+    - competitive_analysis_task
+
+strategic_recommendation_task:
+  description: >
+    Susun laporan rekomendasi strategis yang komprehensif dan actionable untuk
+    bisnis {topic} di {location} berdasarkan seluruh hasil analisis pasar,
+    kompetitor, dan konsumen yang telah dilakukan.
+
+    Rekomendasi strategi harus mencakup:
+
+    1. EXECUTIVE SUMMARY
+       - Ringkasan peluang bisnis utama
+       - Key success factors untuk {topic} di {location}
+       - Risk assessment dan mitigasi
+
+    2. STRATEGI MASUK PASAR (GO-TO-MARKET)
+       - Segmen target prioritas (berdasarkan atractivitas dan kemampuan)
+       - Propositif nilai (value proposition) yang diferensiatif
+       - Strategi penetapan harga yang kompetitif
+       - Channel distribusi dan penjualan yang optimal untuk {location}
+
+    3. STRATEGI PEMASARAN & KOMUNIKASI
+       - Positioning dan messaging utama
+       - Channel pemasaran prioritas untuk konsumen {location}
+       - Strategi konten dan komunikasi
+       - Taktik akuisisi dan retensi pelanggan
+
+    4. RENCANA OPERASIONAL
+       - Kebutuhan sumber daya kritis
+       - Mitra strategis dan ekosistem yang perlu dibangun di {location}
+       - Standar layanan dan operasional minimum
+
+    5. ROADMAP IMPLEMENTASI
+       - Quick wins (0-3 bulan): Tindakan yang bisa dilakukan segera
+       - Medium term (3-12 bulan): Inisiatif pembangunan kapabilitas
+       - Long term (1-3 tahun): Visi pertumbuhan dan ekspansi
+
+    6. KEY PERFORMANCE INDICATORS (KPI)
+       - KPI finansial yang perlu dipantau
+       - KPI operasional dan layanan
+       - KPI pemasaran dan pertumbuhan
+
+  expected_output: >
+    Laporan rekomendasi strategis final yang komprehensif dalam Bahasa Indonesia:
+
+    # LAPORAN ANALISIS PASAR & REKOMENDASI STRATEGIS
+    ## {topic} di {location}
+
+    ---
+
+    ## EXECUTIVE SUMMARY
+    [Ringkasan eksekutif 3-5 paragraf tentang kondisi pasar dan rekomendasi utama]
+
+    ## PELUANG BISNIS UTAMA
+    [Top 3 peluang terbesar dengan potensi dampak dan tingkat kesulitan implementasi]
+
+    ## STRATEGI GO-TO-MARKET
+    [Rencana masuk pasar yang detail dan actionable]
+
+    ## STRATEGI PEMASARAN
+    [Taktik pemasaran yang spesifik untuk {location}]
+
+    ## ROADMAP IMPLEMENTASI
+    [Timeline dengan milestone yang jelas: 0-3 bulan, 3-12 bulan, 1-3 tahun]
+
+    ## KPI & METRIK KEBERHASILAN
+    [Daftar KPI dengan target terukur]
+
+    ## RISIKO & MITIGASI
+    [Top 3 risiko utama beserta strategi mitigasinya]
+
+    ## KESIMPULAN
+    [Rekomendasi akhir dan langkah pertama yang harus diambil]
+
+    ---
+    *Laporan ini disusun berdasarkan analisis pasar, kompetitor, dan konsumen
+    untuk {topic} di {location}*
+  agent: strategic_advisor
+  context:
+    - market_research_task
+    - competitive_analysis_task
+    - consumer_analysis_task
+  output_file: output/market_analysis_{location}.md

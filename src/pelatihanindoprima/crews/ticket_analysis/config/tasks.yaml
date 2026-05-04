@@ -1,0 +1,42 @@
+analyze_ticket_task:
+  description: >
+    Baca dan analisis tiket IT berikut secara mendalam:
+
+    Judul Tiket  : {title}
+    Deskripsi    : {description}
+
+    Lakukan analisis mencakup:
+    - Apa masalah utama yang dilaporkan?
+    - Apa dampak yang dirasakan user?
+    - Komponen sistem apa yang kemungkinan terlibat?
+    - Informasi teknis apa yang bisa digali dari laporan ini?
+
+  expected_output: >
+    Laporan analisis tiket yang mencakup:
+    - Pemahaman inti masalah
+    - Komponen teknis yang terlibat
+    - Dampak terhadap user
+    - Tingkat urgensi
+    Ditulis dalam Bahasa Indonesia.
+  agent: ticket_analyzer
+
+classify_issue_task:
+  description: >
+    Berdasarkan hasil analisis tiket di atas, klasifikasikan masalah
+    dan hasilkan output dalam format JSON yang ketat berikut:
+
+    {{
+      "category": "<nama kategori masalah, contoh: Authentication Issue>",
+      "technical_area": "<area teknis, pilih salah satu: Backend / Frontend / Infrastructure / Security / Database / Network>",
+      "summary": "<ringkasan masalah dalam 1-2 kalimat Bahasa Indonesia>"
+    }}
+
+    Pastikan output adalah JSON valid tanpa teks tambahan.
+
+  expected_output: >
+    JSON valid dengan tiga field: category, technical_area, dan summary.
+    Contoh:
+    {{"category": "Authentication Issue", "technical_area": "Backend", "summary": "User tidak bisa login setelah reset password karena token tidak diperbarui."}}
+  agent: ticket_classifier
+  context:
+    - analyze_ticket_task
