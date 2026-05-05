@@ -1,0 +1,53 @@
+```json
+{
+  "analysis_summary": {
+    "total_records_analyzed": 500,
+    "anomalies_detected": 25,
+    "anomaly_percentage": "5.00%",
+    "status": "Attention Required",
+    "findings": "The Isolation Forest algorithm identified 25 anomalous data points within the dataset. These anomalies are characterized by erratic fluctuations in temperature and draft readings, specifically in the Cyclone Inlet Gas Temperature, Material Temperature, and various draft measurements (Outlet Gas, Cone, and Inlet Draft)."
+  },
+  "detected_anomalies_sample": [
+    {
+      "index": 0,
+      "cyclone_inlet_gas_temp": 867.63,
+      "cyclone_material_temp": 910.42,
+      "cyclone_outlet_gas_draft": -189.54,
+      "cyclone_cone_draft": -186.04,
+      "cyclone_gas_outlet_temp": 852.13,
+      "cyclone_inlet_draft": -145.90,
+      "day_number": 6210
+    },
+    {
+      "index": 47,
+      "cyclone_inlet_gas_temp": 909.43,
+      "cyclone_material_temp": 956.26,
+      "cyclone_outlet_gas_draft": -171.29,
+      "cyclone_cone_draft": -158.91,
+      "cyclone_gas_outlet_temp": 892.23,
+      "cyclone_inlet_draft": -138.09,
+      "day_number": 6210
+    },
+    {
+      "index": 139,
+      "cyclone_inlet_gas_temp": 906.96,
+      "cyclone_material_temp": 962.43,
+      "cyclone_outlet_gas_draft": -172.44,
+      "cyclone_cone_draft": -149.13,
+      "cyclone_gas_outlet_temp": 900.39,
+      "cyclone_inlet_draft": -139.19,
+      "day_number": 6210
+    }
+  ],
+  "reminders": [
+    {
+      "priority": "High",
+      "message": "Immediate investigation of Cyclone temperature and draft variance is recommended, as the detected anomalies may indicate sensor malfunction or operational instability."
+    },
+    {
+      "priority": "Medium",
+      "message": "Verify the data integrity for day numbers 6210 and 6211, as a significant cluster of anomalies was detected during this period."
+    }
+  ]
+}
+```

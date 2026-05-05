@@ -1,0 +1,14 @@
+task_file_analyzer:
+  description: >
+    Conduct a thorough extract of an existing {file}, and make sure you identify
+    every part from the report, particularly those related to sales figures.
+  expected_output: >
+    A JSON object with a single key "results" containing a list of exactly 5 items.
+    Each item must have two fields:
+    "insight" (a concise finding or observation from the document)
+    and "indikator" (the specific KPI or metric that supports the finding).
+    Return only valid JSON, no additional text or explanation.
+    Example format:
+    {"results": [{"insight": "...", "indikator": "..."}, ...]}
+  output_file: output/file_analyzer_result.json
+  agent: agent_file_analyzer

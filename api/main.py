@@ -1,11 +1,15 @@
 from celery.result import AsyncResult
 from tasks.celery_app import celery_app
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 import tasks.celery_tasks as celeryTask
+import os
+import uuid
 
 app = FastAPI(title="IT Support Automation API")
 
+FILE_FOLDER = "uploads"
+os.makedirs(FILE_FOLDER, exist_ok=True)
 
 # ── INPUT MODELS ─────────────────────────────────────────────────────────────
 
@@ -86,3 +90,73 @@ async def get_status(task_id: str) -> TaskStatus:
         task_id=task_id,
         status=task_result.state,
     )
+
+@app.post("/file-analyzer")
+async def file_analyzer(file: UploadFile = File(...)):
+    ALLOWED_EXTENSIONS = {".txt", ".json", ".csv", ".xlsx", ".xls"}
+    ALLOWED_MIME_TYPES = {
+        "text/plain",
+        "application/json",
+        "text/csv",
+        "text/tab-separated-values",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        "application/vnd.ms-excel",                                          
+        "application/octet-stream",
+    }
+
+    file_extension = os.path.splitext(file.filename)[1].lower() if file.filename else ""
+
+    if file_extension not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type '{file_extension}'. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+
+    if file.content_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported MIME type '{file.content_type}'. Allowed: TXT, JSON, CSV"
+        )
+
+    unique_filename = f"{uuid.uuid4().hex}{file_extension}"
+    file_path = os.path.join(FILE_FOLDER, unique_filename)
+
+    content = await file.read()
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    task = celeryTask.file_analyzer.delay(file_path)
+    return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}
+
+@app.post("/detect-anomalies")
+async def detect_anomalies(file: UploadFile = File(...)):
+    ALLOWED_EXTENSIONS = {".xlsx", ".xls"}
+    ALLOWED_MIME_TYPES = {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        "application/vnd.ms-excel",                                          
+        "application/octet-stream",
+    }
+
+    file_extension = os.path.splitext(file.filename)[1].lower() if file.filename else ""
+
+    if file_extension not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type '{file_extension}'. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+
+    if file.content_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported MIME type '{file.content_type}'. Allowed: Excel (.xlsx, .xls)"
+        )
+
+    unique_filename = f"{uuid.uuid4().hex}{file_extension}"
+    file_path = os.path.join(FILE_FOLDER, unique_filename)
+
+    content = await file.read()
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    task = celeryTask.crew_anomali.delay(file_path)
+    return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}

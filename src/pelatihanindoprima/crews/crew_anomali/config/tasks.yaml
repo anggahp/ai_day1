@@ -1,0 +1,8 @@
+anomali_task:
+  description: >
+    you are responsible for analyzing the file at {file}, 
+    detecting data anomalies using the provided tool, and providing a summary and reminder based on the findings.
+  expected_output: >
+    A json with the result of the analysis
+  agent: anomali_agent
+  output_file: output/output_anomali.json
