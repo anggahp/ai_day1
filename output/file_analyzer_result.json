@@ -1,24 +1,24 @@
 {
   "results": [
     {
-      "insight": "High thermal readings in the cyclone system are consistently associated with operational anomalies.",
-      "indikator": "anomaly: 1"
+      "insight": "The dataset monitors industrial cyclone performance with frequent anomaly occurrences.",
+      "indikator": "anomaly"
     },
     {
-      "insight": "Cyclone material temperatures are significantly higher than gas inlet and outlet temperatures.",
-      "indikator": "Cyclone_Material_Temp: 910.42 to 951.32"
+      "insight": "Cyclone material temperatures consistently remain higher than inlet gas temperatures.",
+      "indikator": "Cyclone_Material_Temp"
     },
     {
-      "insight": "There is a consistent negative pressure trend in the gas outlet and cone draft.",
-      "indikator": "Cyclone_Outlet_Gas_draft: -175.01 to -189.54"
+      "insight": "The gas outlet temperature generally tracks closely with the inlet gas temperature.",
+      "indikator": "Cyclone_Gas_Outlet_Temp"
     },
     {
-      "insight": "Gas inlet temperatures fluctuate around the 860-905 range during the recorded period.",
-      "indikator": "Cyclone_Inlet_Gas_Temp: 860.7 to 905.94"
+      "insight": "System pressure drafts are consistently negative across inlet, cone, and outlet measurements.",
+      "indikator": "Cyclone_Inlet_Draft"
     },
     {
-      "insight": "Inlet draft pressures remain stable and negative across all recorded anomaly instances.",
-      "indikator": "Cyclone_Inlet_Draft: -139.33 to -151.83"
+      "insight": "Data collection is categorized by specific day intervals for trend analysis.",
+      "indikator": "day_number"
     }
   ]
 }

@@ -5,6 +5,7 @@ from src.pelatihanindoprima.crews.ticket_analysis.ticket_analysis import TicketA
 from src.pelatihanindoprima.crews.solution_crew.solution_crew import SolutionCrew
 from src.pelatihanindoprima.crews.file_analyzer.file_analyzer import FileAnalyzer
 from src.pelatihanindoprima.crews.crew_anomali.crew_anomali import CrewAnomali
+from src.pelatihanindoprima.crews.crew_prediksi.crew_prediksi import CrewPrediksi
 import logging
 import traceback
 
@@ -55,16 +56,12 @@ def file_analyzer(self, file:str):
     self.update_state(state='RUNNING', meta={'current':f'start job for {file}'})
     try:
         result = FileAnalyzer().crew().kickoff(inputs = {"file": file})
-        # output_json → result.json_dict is the parsed dict
         if result.json_dict:
             return result.json_dict
-        # Fallback: try to extract JSON from raw string (handles trailing characters)
         import json, re
         raw = result.raw or ""
-        # Strip markdown code fences if present
         raw = re.sub(r"^```(?:json)?\s*", "", raw.strip())
         raw = re.sub(r"\s*```$", "", raw)
-        # Extract first valid JSON object/array
         match = re.search(r'(\{.*\}|\[.*\])', raw, re.DOTALL)
         if match:
             return json.loads(match.group(1))
@@ -78,20 +75,26 @@ def crew_anomali(self, file:str):
     self.update_state(state='RUNNING', meta={'current':f'start job for crew anomali with file {file}'})
     try:
         result = CrewAnomali().crew().kickoff(inputs = {"file": file})
-        # output_json → result.json_dict is the parsed dict
         if result.json_dict:
             return result.json_dict
-        # Fallback: try to extract JSON from raw string (handles trailing characters)
         import json, re
         raw = result.raw or ""
-        # Strip markdown code fences if present
         raw = re.sub(r"^```(?:json)?\s*", "", raw.strip())
         raw = re.sub(r"\s*```$", "", raw)
-        # Extract first valid JSON object/array
         match = re.search(r'(\{.*\}|\[.*\])', raw, re.DOTALL)
         if match:
             return json.loads(match.group(1))
         return raw
     except Exception as e:
         logger.error(f"Task crew_anomali failed: {e}\n{traceback.format_exc()}")
+        raise
+
+@celery_app.task(bind=True, name="predict_sales")
+def predict_sales(self, file:str):
+    self.update_state(state='RUNNING', meta={'current':f'start job for crew prediksi with file {file}'})
+    try:
+        result = CrewPrediksi().crew().kickoff(inputs = {"file": file})
+        return result.raw or ""
+    except Exception as e:
+        logger.error(f"Task predict_sales failed: {e}\n{traceback.format_exc()}")
         raise

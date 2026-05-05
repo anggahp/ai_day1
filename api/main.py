@@ -160,3 +160,36 @@ async def detect_anomalies(file: UploadFile = File(...)):
 
     task = celeryTask.crew_anomali.delay(file_path)
     return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}
+
+@app.post("/predict-sales")
+async def predict_sales(file: UploadFile = File(...)):
+    ALLOWED_EXTENSIONS = {".xlsx", ".xls"}
+    ALLOWED_MIME_TYPES = {
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        "application/vnd.ms-excel",                                          
+        "application/octet-stream",
+    }
+
+    file_extension = os.path.splitext(file.filename)[1].lower() if file.filename else ""
+
+    if file_extension not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type '{file_extension}'. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+
+    if file.content_type not in ALLOWED_MIME_TYPES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported MIME type '{file.content_type}'. Allowed: Excel (.xlsx, .xls)"
+        )
+
+    unique_filename = f"{uuid.uuid4().hex}{file_extension}"
+    file_path = os.path.join(FILE_FOLDER, unique_filename)
+
+    content = await file.read()
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    task = celeryTask.predict_sales.delay(file_path)
+    return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}

@@ -1,0 +1,11 @@
+prediksi_task:
+  description: >
+    You are responsible for analyzing the file at {file},
+    running the sales prediction using the provided tool, and summarizing the forecast results clearly.
+    You must provide an analysis of the predicted data, such as identifying upward or downward trends,
+    and explaining what these predictions mean for the business.
+  expected_output: >
+    A well-structured Markdown (.md) document containing the prediction results in a table
+    and a detailed analysis of the forecast trends.
+  agent: prediksi_agent
+  output_file: output/output_prediksi.md
