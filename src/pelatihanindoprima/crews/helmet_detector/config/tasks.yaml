@@ -1,0 +1,6 @@
+helmet_detector_task:
+  description: >
+    your task is to detect objects in the image at {image}, report the results to the database, and pass the final result in structured pydantic object tool_report_db_input
+  expected_output: >
+    json structured result from tool tools_deteksi_helmet
+  agent: helmet_detector

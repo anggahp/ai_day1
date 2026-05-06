@@ -6,6 +6,8 @@ from src.pelatihanindoprima.crews.solution_crew.solution_crew import SolutionCre
 from src.pelatihanindoprima.crews.file_analyzer.file_analyzer import FileAnalyzer
 from src.pelatihanindoprima.crews.crew_anomali.crew_anomali import CrewAnomali
 from src.pelatihanindoprima.crews.crew_prediksi.crew_prediksi import CrewPrediksi
+from src.pelatihanindoprima.crews.helmet_detector.helmet_detector import HelmetDetector
+
 import logging
 import traceback
 
@@ -71,7 +73,7 @@ def file_analyzer(self, file:str):
         raise
 
 @celery_app.task(bind=True, name="detect_anomalies")
-def crew_anomali(self, file:str):
+def detect_anomalies(self, file:str):
     self.update_state(state='RUNNING', meta={'current':f'start job for crew anomali with file {file}'})
     try:
         result = CrewAnomali().crew().kickoff(inputs = {"file": file})
@@ -86,7 +88,7 @@ def crew_anomali(self, file:str):
             return json.loads(match.group(1))
         return raw
     except Exception as e:
-        logger.error(f"Task crew_anomali failed: {e}\n{traceback.format_exc()}")
+        logger.error(f"Task detect_anomalies failed: {e}\n{traceback.format_exc()}")
         raise
 
 @celery_app.task(bind=True, name="predict_sales")
@@ -97,4 +99,14 @@ def predict_sales(self, file:str):
         return result.raw or ""
     except Exception as e:
         logger.error(f"Task predict_sales failed: {e}\n{traceback.format_exc()}")
+        raise
+    
+@celery_app.task(bind=True, name="detect_helmet")
+def detect_helmet(self, image:str):
+    self.update_state(state='RUNNING', meta={'current':f'start job for{image}'})
+    try:
+        result = HelmetDetector().crew().kickoff(inputs = {"image": image})
+        return str(result)
+    except Exception as e:
+        logger.error(f"Task detect_helmet failed: {e}\n{traceback.format_exc()}")
         raise

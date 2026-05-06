@@ -14,7 +14,7 @@ class CrewPrediksi():
     def prediksi_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['prediksi_agent'], # type: ignore[index]
-            tools=[tool_prediksi()],
+            tools=[ToolHelmetDetection()],
             verbose=True
         )
 

@@ -9,7 +9,9 @@ import uuid
 app = FastAPI(title="IT Support Automation API")
 
 FILE_FOLDER = "uploads"
+IMAGE_FOLDER = "images"
 os.makedirs(FILE_FOLDER, exist_ok=True)
+os.makedirs(IMAGE_FOLDER, exist_ok=True)
 
 # ── INPUT MODELS ─────────────────────────────────────────────────────────────
 
@@ -158,7 +160,7 @@ async def detect_anomalies(file: UploadFile = File(...)):
     with open(file_path, "wb") as f:
         f.write(content)
 
-    task = celeryTask.crew_anomali.delay(file_path)
+    task = celeryTask.detect_anomalies.delay(file_path)
     return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}
 
 @app.post("/predict-sales")
@@ -193,3 +195,19 @@ async def predict_sales(file: UploadFile = File(...)):
 
     task = celeryTask.predict_sales.delay(file_path)
     return {"task_id": task.id, "file_path": file_path, "file_type": file_extension}
+
+@app.post("/detect-helmet")
+async def detect_helmet(image: UploadFile = File(...)):
+    if image.content_type not in ["image/jpeg", "image/png"]:
+        raise HTTPException(status_code=400, detail="File must be a JPEG or PNG image")
+
+    file_extension = os.path.splitext(image.filename)[1] or ".jpg"
+    unique_filename = f"{uuid.uuid4().hex}{file_extension}"
+    file_path = os.path.join(IMAGE_FOLDER, unique_filename)
+
+    content = await image.read()
+    with open(file_path, "wb") as f:
+        f.write(content)
+
+    task = celeryTask.detect_helmet.delay(file_path)
+    return {"task_id": task.id, "file_path": file_path}
