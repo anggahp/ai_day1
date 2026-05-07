@@ -143,12 +143,35 @@ def detect_helmet(self, image:str, chat_id: int = None):
     self.update_state(state='RUNNING', meta={'current':f'start job for{image}'})
     try:
         result = HelmetDetector().crew().kickoff(inputs = {"image": image})
-        res_str = str(result)
+        raw_res = result.raw
         
-        if chat_id:
-            send_telegram_notification(chat_id, res_str, title="Deteksi Helm")
+        # Format the result to be more readable
+        try:
+            import ast
+            # Convert string representation of dict to actual dict if necessary
+            res_dict = ast.literal_eval(raw_res) if isinstance(raw_res, str) else raw_res
             
-        return res_str
+            person = res_dict.get('person', 0)
+            head = res_dict.get('head', 0)
+            helmet = res_dict.get('helmet', 0)
+            
+            formatted_res = (
+                f"👤 **Total Orang**: {person}\n"
+                f"⛑ **Pakai Helm**: {helmet}\n"
+                f"💀 **Tanpa Helm**: {head}\n\n"
+            )
+            
+            if head > 0:
+                formatted_res += "⚠️ **PERINGATAN**: Terdeteksi pelanggaran penggunaan helm!"
+            else:
+                formatted_res += "✅ **AMAN**: Semua personil menggunakan helm."
+        except Exception:
+            formatted_res = str(raw_res)
+
+        if chat_id:
+            send_telegram_notification(chat_id, formatted_res, title="Deteksi Helm")
+            
+        return formatted_res
     except Exception as e:
         logger.error(f"Task detect_helmet failed: {e}\n{traceback.format_exc()}")
         if chat_id:
