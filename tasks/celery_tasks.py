@@ -10,17 +10,54 @@ from src.pelatihanindoprima.crews.helmet_detector.helmet_detector import HelmetD
 
 import logging
 import traceback
+import os
+import httpx
+import json
 
 logger = logging.getLogger(__name__)
 
+TOKEN = os.getenv("TOKEN")
+
+def send_telegram_notification(chat_id, text, title="Hasil Task"):
+    if not chat_id or not TOKEN:
+        return
+    
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+    
+    # Header message
+    header = f"✅ **{title} Selesai!**\n\n"
+    
+    # Chunking message for Telegram (limit is 4096)
+    chunk_size = 3500
+    full_text = header + text
+    
+    for i in range(0, len(full_text), chunk_size):
+        chunk = full_text[i:i+chunk_size]
+        payload = {
+            "chat_id": chat_id,
+            "text": chunk,
+            "parse_mode": "Markdown"
+        }
+        try:
+            httpx.post(url, json=payload, timeout=10)
+        except Exception as e:
+            logger.error(f"Failed to send Telegram notification: {e}")
+
 @celery_app.task(bind=True, name="research")
-def research(self, topic: str, location: str):
+def research(self, topic: str, location: str, chat_id: int = None):
     self.update_state(state='RUNNING', meta={'current': f'start job for {topic} in {location}'})
     try:
         result = ContentCrew().crew().kickoff(inputs={"topic": topic, "location": location})
-        return result.raw
+        raw_result = result.raw
+        
+        if chat_id:
+            send_telegram_notification(chat_id, raw_result, title=f"Riset: {topic}")
+            
+        return raw_result
     except Exception as e:
         logger.error(f"Task failed with error: {e}\n{traceback.format_exc()}")
+        if chat_id:
+            send_telegram_notification(chat_id, f"Maaf, terjadi kesalahan saat melakukan riset: {str(e)}", title="Error Riset")
         raise
 
 @celery_app.task(bind=True, name="analyze_market")
@@ -102,11 +139,18 @@ def predict_sales(self, file:str):
         raise
     
 @celery_app.task(bind=True, name="detect_helmet")
-def detect_helmet(self, image:str):
+def detect_helmet(self, image:str, chat_id: int = None):
     self.update_state(state='RUNNING', meta={'current':f'start job for{image}'})
     try:
         result = HelmetDetector().crew().kickoff(inputs = {"image": image})
-        return str(result)
+        res_str = str(result)
+        
+        if chat_id:
+            send_telegram_notification(chat_id, res_str, title="Deteksi Helm")
+            
+        return res_str
     except Exception as e:
         logger.error(f"Task detect_helmet failed: {e}\n{traceback.format_exc()}")
+        if chat_id:
+            send_telegram_notification(chat_id, f"Gagal mendeteksi helm: {str(e)}", title="Error Deteksi")
         raise

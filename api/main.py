@@ -59,7 +59,11 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     Handle the /start command.
     """
     await update.message.chat.send_action(action="typing")
-    await update.message.reply_text("Halo dari CrewAI Bot 🚀\n\nGunakan /research untuk memulai riset terpandu.\nGunakan /status <task_id> untuk mengecek hasil.")
+    await update.message.reply_text(
+        "Halo dari CrewAI Bot 🚀\n\n"
+        "Gunakan /research untuk memulai riset terpandu.\n"
+        "Gunakan /status <task_id> jika Anda ingin mengecek manual, namun sekarang saya akan **mengirimkan hasilnya secara otomatis** begitu selesai! 🤖"
+    )
 
 async def start_research(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Langkah 1: Memulai riset dan menanyakan topik."""
@@ -84,14 +88,13 @@ async def get_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.chat.send_action(action="typing")
     # Trigger Celery task
-    task = celeryTask.research.delay(topic, location)
+    task = celeryTask.research.delay(topic, location, chat_id=update.effective_chat.id)
     
     await update.message.reply_text(
         f"🚀 **Task Research Dimulai!**\n\n"
         f"• Topic: `{topic}`\n"
         f"• Location: `{location}`\n\n"
-        f"Task ID: `{task.id}`\n"
-        f"Gunakan `/status {task.id}` untuk mengecek hasil.",
+        f"Saya akan mengirimkan hasilnya ke sini jika sudah selesai. Silakan ditunggu! ☕️",
         parse_mode='Markdown'
     )
     return ConversationHandler.END
@@ -151,13 +154,12 @@ async def image_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await new_file.download_to_drive(file_path)
     
     # Trigger Celery task
-    task = celeryTask.detect_helmet.delay(file_path)
+    task = celeryTask.detect_helmet.delay(file_path, chat_id=update.effective_chat.id)
     
     reply_text = (
         f"📸 <b>Gambar Diterima!</b>\n\n"
         f"Sedang menjalankan deteksi helm...\n"
-        f"• Task ID: <code>{task.id}</code>\n\n"
-        f"Cek hasil dengan: <code>/status {task.id}</code>"
+        f"Hasilnya akan saya kirimkan otomatis ke sini. Mohon tunggu sebentar! ⏱"
     )
 
     await update.message.reply_text(reply_text, parse_mode="HTML")
