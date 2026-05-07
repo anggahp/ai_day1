@@ -68,7 +68,6 @@ async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start_research(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Langkah 1: Memulai riset dan menanyakan topik."""
     await update.message.chat.send_action(action="typing")
-    # await update.message.reply_text("🔍 **Mode Riset Terpandu**\nSilakan ketik **Topik** yang ingin Anda riset (atau ketik /cancel untuk batal):")
     await update.message.reply_text("🔍 **Input Topik Riset**\n\nSebutkan topik spesifik yang akan dianalisis oleh sistem.\n\n Ketik /cancel untuk batal.",
     parse_mode="HTML"
     )
