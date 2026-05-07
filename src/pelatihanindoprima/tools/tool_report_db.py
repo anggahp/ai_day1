@@ -1,8 +1,8 @@
 from typing import Type
 from pydantic import BaseModel, Field, ConfigDict
 from crewai.tools import BaseTool
-import mysql.connector
 from typing import Optional
+from src.pelatihanindoprima.tools.database import get_db_connection
 
 class tool_report_db_input(BaseModel):
     head: int = Field(..., description="count of head detected")
@@ -16,12 +16,7 @@ class Tool_report(BaseTool):
 
     def _run(self, head:int, person:int, helmet:int) -> str:
         try:
-            connec = mysql.connector.connect(
-                host = "127.0.0.1",
-                user = "root",
-                password = "password",
-                database = "indoprima",
-            )
+            connec = get_db_connection()
             cursor = connec.cursor()
             if (head > 0):
                 detil = f"{head} heads, {helmet} helmets, and {person} persons"
@@ -34,6 +29,5 @@ class Tool_report(BaseTool):
                 return ("stored to db")
             else:
                 return ("report that everybody is safe")
-            return str(f"total of head is {head}")
         except Exception as e:
             raise(Exception(e))

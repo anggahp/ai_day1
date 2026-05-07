@@ -26,7 +26,16 @@ class HelmetDetector():
             config=self.agents_config['helmet_detector'], # type: ignore[index]
             verbose=True,
             tools= [ToolHelmetDetection(), Tool_report()]
+            # tools= [ToolHelmetDetection()]
         )
+
+    # @agent
+    # def database_reporter(self) -> Agent:
+    #     return Agent(
+    #         config=self.agents_config['database_reporter'], # type: ignore[index]
+    #         verbose=True,
+    #         tools= [Tool_report()]
+    #     )
 
     @task
     def helmet_detector_task(self) -> Task:
@@ -34,6 +43,13 @@ class HelmetDetector():
             config=self.tasks_config['helmet_detector_task'], # type: ignore[index]
             output_json = tool_report_db_input
         )
+
+    # @task
+    # def database_reporting_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['database_reporting_task'], # type: ignore[index]
+    #         context = [self.helmet_detector_task()]
+    #     )
 
     # To learn more about structured task outputs,
     # task dependencies, and task callbacks, check out the documentation:
