@@ -2,3 +2,11 @@
 __pycache__/
 lib/
 .DS_Store
+
+# Ignore temporary uploads, images and output
+uploads/*
+!uploads/.gitkeep
+images/*
+!images/.gitkeep
+output/*
+!output/.gitkeep
